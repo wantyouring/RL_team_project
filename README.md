@@ -21,3 +21,7 @@ RL 팀프로젝트
 + 똥 하나 바닥에 떨어질 때마다 +1  
 + 똥 맞으면 -1  
 
+## option  
+1. LOAD_MODEL : model load. epsilon 최소로 학습 시작.  
+2. RENDER : 화면에 play rendering. 학습 안하고 rendering만 진행.  
+3. RANDOM : 똥 위치 random하게 drop.  
