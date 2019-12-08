@@ -3,13 +3,14 @@
 import numpy as np
 import random
 from collections import deque
-from keras.layers.convolutional import Conv2D
-from keras.layers.convolutional import MaxPooling2D
-from keras.layers import Dense, Flatten
-from keras.optimizers import Adam
-from keras.models import Sequential
+# from keras.layers.convolutional import Conv2D
+# from keras.layers.convolutional import MaxPooling2D
+# from keras.layers import Dense, Flatten
+# from keras.optimizers import Adam
+# from keras.models import Sequential
 import keras
 import tensorflow.compat.v1 as tf
+import tensorflow.compat.v1.keras
 
 def huber_loss(y_true, y_pred):
     return tf.losses.huber_loss(y_true, y_pred)
@@ -47,21 +48,21 @@ class DoubleDQNAgent:
     # 모델 생성.
     # cnn사용
     def build_model(self):
-        model = Sequential()
+        model = keras.Sequential()
         #model.add(Conv2D(8, (8, 8), strides=(8, 8), activation='relu', input_shape=self.state_size))
         #model.add(MaxPooling2D(pool_size=(10, 10), strides=(5, 5), input_shape=self.state_size))
         #model.add(Conv2D(4, (4, 4), strides=(2, 2), activation='relu', input_shape=self.state_size,
         #                 kernel_initializer='he_uniform'))
         #model.add(Conv2D(16,(4,4),strides=(2,2),activation='relu'))
-        model.add(Conv2D(16,(4,4),strides=(2,2),activation='relu',input_shape=self.state_size,
+        model.add(keras.layers.Conv2D(16,(4,4),strides=(2,2),activation='relu',input_shape=self.state_size,
                          kernel_initializer='he_uniform'))
-        model.add(Conv2D(8, (2, 2), strides=(1, 1), activation='relu', kernel_initializer='he_uniform'))
-        model.add(Flatten())
-        model.add(Dense(512,activation='relu', kernel_initializer='he_uniform'))
-        model.add(Dense(self.action_size))
+        model.add(keras.layers.Conv2D(8, (2, 2), strides=(1, 1), activation='relu', kernel_initializer='he_uniform'))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dense(512,activation='relu', kernel_initializer='he_uniform'))
+        model.add(keras.layers.Dense(self.action_size))
         model.summary()
         #model.compile(loss='mse',optimizer=Adam(lr=self.learning_rate))
-        model.compile(loss=huber_loss, optimizer=Adam(lr=self.learning_rate))
+        model.compile(loss=huber_loss, optimizer=keras.optimizers.Adam(lr=self.learning_rate))
         return model
 
     # 타겟모델에 학습모델 복사.
