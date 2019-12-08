@@ -25,3 +25,13 @@ RL 팀프로젝트
 1. LOAD_MODEL : model load. epsilon 최소로 학습 시작.  
 2. RENDER : 화면에 play rendering. 학습 안하고 rendering만 진행.  
 3. RANDOM : 똥 위치 random하게 drop.  
+
+## 필요 모듈  
+pip install tensorflow-gpu==2.0.0  
+pip install pygame  
+pip install matplotlib  
+pip install keras  
+
+## 실행하기  
+python game_ram_env.py  
+python game_pixel_env.py  
