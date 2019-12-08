@@ -10,10 +10,12 @@ from time import sleep
 from collections import deque
 from doubleDQN import DoubleDQNAgent
 
+# 현재 화면 클릭 시 멈춤현상.
+
 ##### 학습 variable
 EPISODES = 5000000
-LOAD_MODEL = False
-RENDER = False # rendering하며 model play
+LOAD_MODEL = True
+RENDER = True # rendering하며 model play. Rendering 모드에서는 학습하지 않음.
 TOTAL_DDONG = 8
 
 state_size = TOTAL_DDONG * 2 + 2  # 똥 x좌표 n개 + 똥 y좌표 n개 + man x좌표 + man y좌표
@@ -111,7 +113,7 @@ def playgame(gamepad,man,ddong,clock,agent):
                 end_game = True
                 reward = -100 # 똥 맞으면 패널티
 
-        # 배경, 사람, 똥 그리기, 점수표시
+        # 배경, 사람, 똥 그리기, 점수표시.
         if RENDER == True:
             gamepad.fill(BLACK) # 화면 초기화
             gamepad.blit(man, (man_x, man_y)) # 사람
@@ -122,33 +124,32 @@ def playgame(gamepad,man,ddong,clock,agent):
             text = font.render('Score: {}'.format(score), True, (255, 255, 255))
             gamepad.blit(text, (380, 30))
             pygame.display.update()
-
-
-
-        # ---여기까지 해당 action에 대해 step끝남
-
-        agent.avg_q_max += np.amax(agent.model.predict(state)[0])
-        #if epi_step % 4 == 0 or end_game: # 4단위로 frame skip, 끝나는 상황은 체크
-        next_state = reshape_to_state(ddong_x, ddong_y, man_x, man_y)
-        agent.append_sample(state, action, reward, next_state, end_game)
-        agent.train_model()
-        state = next_state
-
-        if global_step % agent.update_target_rate == 0:
-            agent.update_target_model()
-
-        if end_game or (score >= 500):
-            avg_q_max_record.append(agent.avg_q_max / float(epi_step))
-            return epi_step, score
-
-        # FPS
-        if RENDER == True:
-            clock.tick(60)
+            if end_game or (score >= 500):
+                avg_q_max_record.append(agent.avg_q_max / float(epi_step))
+                return epi_step, score
+            next_state = reshape_to_state(ddong_x, ddong_y, man_x, man_y)
+            state = next_state
+            clock.tick(30)
+            continue
         else:
-            clock.tick(100000000000000)
-        #clock.tick(100000000000000)
-        #clock.tick(10)
+            # ---여기까지 해당 action에 대해 step끝남
 
+            agent.avg_q_max += np.amax(agent.model.predict(state)[0])
+            #if epi_step % 4 == 0 or end_game: # 4단위로 frame skip, 끝나는 상황은 체크
+            next_state = reshape_to_state(ddong_x, ddong_y, man_x, man_y)
+            agent.append_sample(state, action, reward, next_state, end_game)
+            agent.train_model()
+            state = next_state
+
+            if global_step % agent.update_target_rate == 0:
+                agent.update_target_model()
+
+            if end_game or (score >= 500):
+                avg_q_max_record.append(agent.avg_q_max / float(epi_step))
+                return epi_step, score
+
+            # FPS
+            clock.tick(100000000000000)
 
 if __name__ == "__main__":
     #global state_size, action_size
