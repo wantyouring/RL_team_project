@@ -36,8 +36,8 @@ MINI_man_height = 1
 
 ##### 학습 variable
 EPISODES = 5000000
-LOAD_MODEL = False
-RENDER = False # rendering하며 model play
+LOAD_MODEL = True
+RENDER = True # rendering하며 model play
 
 TOTAL_DDONG = 8
 
@@ -154,36 +154,38 @@ def playgame(gamepad,man,ddong,clock,agent):
             text = font.render('Score: {}'.format(score), True, (255, 255, 255))
             gamepad.blit(text, (380, 30))
             pygame.display.update()
-
-
-
-        # ---여기까지 해당 action에 대해 step끝남
-        if max_score < score and RENDER == False:
-            max_score = score
-            agent.model.save_weights("./max_score_model.h5")
-
-        agent.avg_q_max += np.amax(agent.model.predict(state)[0])
-        #if epi_step % 4 == 0 or end_game: # 4단위로 frame skip, 끝나는 상황은 체크
-        next_state = reshape_to_state(ddong_x, ddong_y, man_x, man_y)
-        agent.append_sample(state, action, reward, next_state, end_game)
-        if global_step % 5: # 5step마다 학습하기.
-            agent.train_model()
-        state = next_state
-
-        if global_step % agent.update_target_rate == 0:
-            agent.update_target_model()
-
-        if end_game or score >= 200:
-            avg_q_max_record.append(agent.avg_q_max / float(epi_step))
-            return epi_step, score
-
-        # FPS
-        if RENDER == True:
+            if end_game or (score >= 500):
+                avg_q_max_record.append(agent.avg_q_max / float(epi_step))
+                return epi_step, score
+            next_state = reshape_to_state(ddong_x, ddong_y, man_x, man_y)
+            state = next_state
             clock.tick(30)
+            continue
         else:
+            # ---여기까지 해당 action에 대해 step끝남
+            if max_score < score: # max score의 모델 저장.
+                max_score = score
+                agent.model.save_weights("./max_score_model.h5")
+
+            agent.avg_q_max += np.amax(agent.model.predict(state)[0])
+            #if epi_step % 4 == 0 or end_game: # 4단위로 frame skip, 끝나는 상황은 체크
+            next_state = reshape_to_state(ddong_x, ddong_y, man_x, man_y)
+            agent.append_sample(state, action, reward, next_state, end_game)
+            if global_step % 5: # 5step마다 학습하기.
+                agent.train_model()
+            state = next_state
+
+            if global_step % agent.update_target_rate == 0:
+                agent.update_target_model()
+
+            if end_game or score >= 200:
+                avg_q_max_record.append(agent.avg_q_max / float(epi_step))
+                return epi_step, score
+
+            # FPS
             clock.tick(100000000000000)
-        #clock.tick(100000000000000)
-        #clock.tick(10)
+            #clock.tick(100000000000000)
+            #clock.tick(10)
 
 
 if __name__ == "__main__":

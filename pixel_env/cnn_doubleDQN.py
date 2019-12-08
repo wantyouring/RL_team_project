@@ -26,7 +26,7 @@ class DoubleDQNAgent:
         self.learning_rate = 0.00001
         self.epsilon = 1.0
         self.epsilon_decay = 0.9999
-        self.epsilon_min = 0.01
+        self.epsilon_min = 0.001
         self.batch_size = 32
         self.train_start = 1000
         self.update_target_rate = 300
