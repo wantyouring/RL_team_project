@@ -14,8 +14,9 @@ from doubleDQN import DoubleDQNAgent
 
 ##### 학습 variable
 EPISODES = 5000000
-LOAD_MODEL = True
-RENDER = True # rendering하며 model play. Rendering 모드에서는 학습하지 않음.
+LOAD_MODEL = False
+RENDER = False # rendering하며 model play. Rendering 모드에서는 학습하지 않음.
+RANDOM = True
 TOTAL_DDONG = 8
 
 state_size = TOTAL_DDONG * 2 + 2  # 똥 x좌표 n개 + 똥 y좌표 n개 + man x좌표 + man y좌표
@@ -102,6 +103,8 @@ def playgame(gamepad,man,ddong,clock,agent):
             ddong_y[index] += ddong_speed
             # 똥 끝까지 떨어졌을 시 새로운 똥 ㄱㄱ
             if value > PAD_HEIGHT:
+                if RANDOM: # 랜덤 위치 똥
+                    ddong_x[index] = int(random.randrange(0, PAD_WIDTH - man_width) / 48) * 48
                 #ddong_x[index] = int(random.randrange(0,PAD_WIDTH - man_width) / 48) * 48
                 ddong_y[index] = -ddong_height
                 reward = 1 # 똥 안맞으면 reward

@@ -17,7 +17,7 @@ class DoubleDQNAgent:
 
         # DDQN 하이퍼 파라미터
         self.discount_factor = 0.99
-        self.learning_rate = 0.00001
+        self.learning_rate = 0.0001
         self.epsilon = 1.0
         self.epsilon_decay = 0.9999
         self.epsilon_min = 0.001
@@ -42,8 +42,8 @@ class DoubleDQNAgent:
     # fully connected layer사용
     def build_model(self):
         model = Sequential()
-        model.add(Dense(1024, input_dim=self.state_size, activation='relu'))
-        model.add(Dense(512, activation='relu'))
+        model.add(Dense(256, input_dim=self.state_size, activation='relu'))
+        model.add(Dense(128, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         model.summary()
         model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
