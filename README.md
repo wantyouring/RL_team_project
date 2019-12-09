@@ -35,3 +35,6 @@ pip install keras
 ## 실행하기  
 python game_ram_env.py  
 python game_pixel_env.py  
+
+## 실행화면  
+![](https://github.com/wantyouring/RL_team_project/blob/master/ram_env/ram_random_8000epi.gif)
