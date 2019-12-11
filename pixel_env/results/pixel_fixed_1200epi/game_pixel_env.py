@@ -143,7 +143,7 @@ def playgame(gamepad,man,ddong,clock,agent):
         for index, value in enumerate(ddong_y):
             if abs(ddong_x[index] - man_x) < ddong_width and man_y - ddong_y[index] <  ddong_height:
                 end_game = True
-                reward = -1 # 똥 맞으면 패널티
+                reward = -100 # 똥 맞으면 패널티
 
         # 배경, 사람, 똥 그리기, 점수표시
         if RENDER == True:

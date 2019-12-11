@@ -19,7 +19,7 @@ RL 팀프로젝트
 + 2 - 오른쪽 이동  
 3. reward :  
 + 똥 하나 바닥에 떨어질 때마다 +1  
-+ 똥 맞으면 -1  
++ 똥 맞으면 -100  
 
 ## option  
 1. LOAD_MODEL : model load. epsilon 최소로 학습 시작.  
@@ -37,4 +37,4 @@ python game_ram_env.py
 python game_pixel_env.py  
 
 ## 실행화면  
-![](https://github.com/wantyouring/RL_team_project/blob/master/ram_env/ram_random_8000epi.gif)
+![](https://github.com/wantyouring/RL_team_project/blob/master/ram_env/results/ram_random_20000epi/ram_random_20000epi.gif)
