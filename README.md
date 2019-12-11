@@ -1,6 +1,9 @@
 # RL_team_project
 RL 팀프로젝트
 
+## user 모드  
+방향키로 플레이  
+
 ## ram 환경  
 1. state : [똥 x좌표, 똥 y좌표, player x좌표, player y 좌표]  
 2. action :  
